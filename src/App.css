@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Jost');
 @import "bootstrap";
+
 .Home {
     text-align: center;
     background-color: white;
@@ -128,7 +129,46 @@ input[type=text] {
     from {
         transform: rotate(0deg);
     }
+
     to {
         transform: rotate(360deg);
     }
+}
+
+.centered {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading {
+    position: absolute;
+    text-align: center;
+    align-items: center;
+}
+
+.loading p {
+    font-size: 16px;
+    color: red;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading .spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 4px solid red;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
 }

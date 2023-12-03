@@ -248,7 +248,7 @@ def get_second_tuple_line(previous_rhyme, related_line_nums, song_lines):
     return random.choice(lines)
 
 
-@app.route('/<input_word>', methods=['GET'])
+@app.route('/<input_word>', methods=['POST'])
 def main(input_word):
     print("New request:", input_word)
     # Specify the path to the song_lines.txt file
@@ -283,7 +283,6 @@ def main(input_word):
 
     prev_rhyme = ""
     i = 0
-    print(output_rap)
     while len(output_rap) < 16 and i < len(related_words):
         curr_related_word = related_words[i]
         if len(curr_related_word) <= 2:

@@ -10,15 +10,31 @@ import algoRhythm3 from './images/algo_rhythm3.png';
 const Result = () => {
     const { state } = useLocation();
     const { word } = state;
-
     const [data, setData] = useState(null);
     useEffect(() => {
-        fetch(`http://localhost:5001/${word}`).then(res => res.json()).then(data => { setData(data); console.log(data); }).catch(err => console.error(err));
+        console.log('Fetching data...');
+        fetch(`http://localhost:5001/${word}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log('Data received:', data);
+                setData(data);
+            })
+            .catch(err => console.error('Error:', err));
 
     }, [word]);
 
     if (data === null) {
-        return <p>Loading...</p>;
+        return <div class="centered">
+            <div className="loading">
+                <div className="spinner"></div>
+                <p>Loading...</p>
+            </div>
+        </div>;
     }
     return (
         <div className="Result">
