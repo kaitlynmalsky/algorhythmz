@@ -14,10 +14,7 @@ const Result = () => {
     useEffect(() => {
         console.log('Fetching data...');
         fetch(`http://localhost:5001/${word}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            method: 'POST'
         })
             .then(res => res.json())
             .then(data => {
@@ -29,12 +26,12 @@ const Result = () => {
     }, [word]);
 
     if (data === null) {
-        return <div class="centered">
+        return <div className="centered" >
             <div className="loading">
                 <div className="spinner"></div>
                 <p>Loading...</p>
             </div>
-        </div>;
+        </div >;
     }
     return (
         <div className="Result">
@@ -60,7 +57,7 @@ const Result = () => {
             <div className="Song-lyrics">
                 <>
                     {data.map((item) =>
-                        <div>
+                        <div key={item}>
                             {item}
                         </div>
                     )}

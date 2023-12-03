@@ -9,13 +9,51 @@ import json
 from collections import defaultdict
 import string
 import pronouncing
-from flask import Flask
+from flask import Flask, request, Response
 from flask_cors import CORS
 import random
 from collections import OrderedDict
+import concurrent.futures
+import aiohttp
+import asyncio
 
 app = Flask(__name__)
-CORS(app, origins="https://algorhythmz.tech")
+CORS(app, origins="http://localhost:3000")
+
+
+@app.before_request
+def handle_preflight():
+    if request.method == "OPTIONS":
+        res = Response()
+        res.headers['X-Content-Type-Options'] = '*'
+        return res
+
+
+async def async_get_related_words_from_website(session, input_word):
+    url = f"https://relatedwords.io/{input_word}"
+    headers = {
+        'User-Agent': UserAgent().random,
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+    }
+
+    async with session.get(url, headers=headers) as response:
+        if response.status == 200:
+            soup = BeautifulSoup(await response.text(), 'html.parser')
+            main_column = soup.find('div', {'class': 'main-column'})
+            term_list = main_column.find('ul', {'id': 'terms-list'})
+            return [li.text.strip() for li in term_list.find_all('li')]
+        else:
+            print(
+                f"Error: Unable to fetch data. Status code: {response.status}")
+            return []
+
+
+async def fetch_related_words(input_word):
+    async with aiohttp.ClientSession() as session:
+        return await async_get_related_words_from_website(session, input_word)
 
 
 def get_song_lines(input_file_path):
@@ -265,8 +303,12 @@ def main(input_word):
     file_path = 'cmudict-0.7b'
     first_word_list = extract_first_words_from_file(file_path)
 
-    related_words = get_related_words_from_website(input_word)[
-        : num_related_words]
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
+    related_words = loop.run_until_complete(fetch_related_words(input_word))[
+        :num_related_words]
+
     flattened_words = [
         word for words in related_words for word in words.split()]
     ordered_dict = OrderedDict.fromkeys(flattened_words)
@@ -283,6 +325,7 @@ def main(input_word):
 
     prev_rhyme = ""
     i = 0
+    print("Generating Rap")
     while len(output_rap) < 16 and i < len(related_words):
         curr_related_word = related_words[i]
         if len(curr_related_word) <= 2:
@@ -310,6 +353,7 @@ def main(input_word):
         i += 1
     for line in output_rap:
         print(line)
+
     return json.dumps(output_rap)
 
 
