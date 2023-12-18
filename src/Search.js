@@ -14,7 +14,7 @@ const Result = () => {
 
     useEffect(() => {
         console.log('Fetching data...');
-        fetch(`http://localhost:5001/${word}`, {
+        fetch(`http://algorhythmz.pythonanywhere.com/${word}`, {
             method: 'POST',
         })
             .then((res) => res.json())
