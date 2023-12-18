@@ -1,8 +1,8 @@
-import { React, useEffect, useState } from 'react';
-import './App.css';
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js"
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import algoRhythm1 from './images/algo_rhythm1.png';
 import algoRhythm2 from './images/algo_rhythm2.png';
 import algoRhythm3 from './images/algo_rhythm3.png';
@@ -11,33 +11,38 @@ const Result = () => {
     const { state } = useLocation();
     const { word } = state;
     const [data, setData] = useState(null);
+
     useEffect(() => {
         console.log('Fetching data...');
         fetch(`http://localhost:5001/${word}`, {
-            method: 'POST'
+            method: 'POST',
         })
-            .then(res => res.json())
-            .then(data => {
-                console.log('Data received:', data);
-                setData(data);
+            .then((res) => res.json())
+            .then((responseData) => {
+                console.log('Data received:', responseData);
+                setData(responseData);
             })
-            .catch(err => console.error('Error:', err));
-
+            .catch((err) => console.error('Error:', err));
     }, [word]);
 
     if (data === null) {
-        return <div className="centered" >
-            <div className="loading">
-                <div className="spinner"></div>
-                <p>Loading...</p>
+        return (
+            <div className="centered">
+                <div className="loading">
+                    <div className="spinner"></div>
+                    <p>Loading...</p>
+                </div>
             </div>
-        </div >;
+        );
     }
+
     return (
         <div className="Result">
             <header className="Result-header">
-                <a href="/"><h3 style={{ color: 'black' }}> ALGORHYTHMZ</h3></a>
-            </header >
+                <a href="/">
+                    <h3 style={{ color: 'black' }}> ALGORHYTHMZ</h3>
+                </a>
+            </header>
             <img
                 className="Album-image"
                 id="image"
@@ -56,11 +61,9 @@ const Result = () => {
 
             <div className="Song-lyrics">
                 <>
-                    {data.map((item) =>
-                        <div key={item}>
-                            {item}
-                        </div>
-                    )}
+                    {data.map((item, index) => (
+                        <div key={index}>{item}</div>
+                    ))}
                 </>
             </div>
         </div>
@@ -68,13 +71,3 @@ const Result = () => {
 };
 
 export default Result;
-
-
-/*
-            <button>
-                <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    Go to Home
-                </Link>
-            </button>
-
-*/
