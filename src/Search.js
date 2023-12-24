@@ -11,7 +11,10 @@ const Result = () => {
     const { state } = useLocation();
     const { word } = state;
     const [data, setData] = useState(null);
-
+    const [inputText, setInputText] = useState("");
+    const handleChange = (e) => {
+        setInputText(e.target.value);
+    };
     useEffect(() => {
         console.log('Fetching data...');
         fetch(`http://algorhythmz.pythonanywhere.com/${word}`, {
@@ -40,7 +43,16 @@ const Result = () => {
         <div className="Result">
             <header className="Result-header">
                 <a href="/">
-                    <h3 style={{ color: 'black' }}> ALGORHYTHMZ</h3>
+                    <h3 style={{ color: 'black' }}> ALGORHYTHMZ <div className="search-bar">
+                        <input
+                            onChange={handleChange}
+                            value={inputText}
+                            name="q"
+                            type="text"
+                            inputMode="search"
+                            placeholder="Search..."
+                        />
+                    </div></h3>
                 </a>
             </header>
             <img

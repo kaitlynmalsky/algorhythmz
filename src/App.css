@@ -172,3 +172,26 @@ input[type=text] {
     animation: spin 1s linear infinite;
     margin: 20px auto;
 }
+
+.search-bar {
+    position: relative;
+    float: right;
+    margin-right: 20px;
+}
+
+.search-bar input {
+    width: 300px;
+    /* Adjust the width as needed */
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+.search-bar input::placeholder {
+    color: #a0a0a0;
+}
