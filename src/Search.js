@@ -50,7 +50,7 @@ const Result = () => {
         console.log('Fetching data...');
 
         // Fetch data from the server
-        fetch(`http://algorhythmz.pythonanywhere.com/${wordState}`, {
+        fetch(`http://localhost:5001/${wordState}`, {
             method: 'POST',
         })
             .then((res) => {
