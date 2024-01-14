@@ -31,8 +31,6 @@ const Result = () => {
 
     // Handle button click
     const handleButtonClick = () => {
-        console.log('Button clicked!');
-        console.log(inputText);
         setData(null); // Clear the data
         setWordState(inputText);
         setInputText("");
@@ -47,10 +45,8 @@ const Result = () => {
             return;
         }
 
-        console.log('Fetching data...');
-
         // Fetch data from the server
-        fetch(`http://localhost:5001/${wordState}`, {
+        fetch(`http://algorhythmz.pythonanywhere.com/${wordState}`, {
             method: 'POST',
         })
             .then((res) => {
@@ -60,7 +56,6 @@ const Result = () => {
                 return res.json();
             })
             .then((responseData) => {
-                console.log('Data received:', responseData);
                 setData(responseData);
             })
             .catch((err) => {
